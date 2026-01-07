@@ -1,12 +1,14 @@
-SDL2 := /opt/sdl2
-SDL2_INC := $(SDL2)/include
-SDL2_LIB := $(SDL2)/lib
+# SDL2 := /opt/sdl2
+# SDL2_INC := $(SDL2)/include
+# SDL2_LIB := $(SDL2)/lib
 
-LIBS =	$(SDL2_LIB)/libSDL2.a $(SDL2_LIB)/libSDL2_mixer.a $(SDL2_LIB)/libSDL2_image.a
+# LIBS =	$(SDL2_LIB)/libSDL2.a $(SDL2_LIB)/libSDL2_mixer.a $(SDL2_LIB)/libSDL2_image.a
 
 GCC := gcc
+# C_FLAGS := -Og -g -Wall -Wextra -Wconversion -Wsign-conversion -fno-strict-aliasing \
+# 		   -I $(SDL2_INC)
 C_FLAGS := -Og -g -Wall -Wextra -Wconversion -Wsign-conversion -fno-strict-aliasing \
-		   -I $(SDL2_INC)
+		   $(sdl2-config --cflags)
 
 SRC := main.c emulator8080.c debug8080.c disassembler8080.c utils8080.c \
 	   test8080.c shift_register.c sdl.c
@@ -16,8 +18,10 @@ OBJ_P := $(OBJ:%=build/%)
 all: emulator8080
 build/%.o: src/%.c $(wildcard src/*.h) Makefile | build
 	$(GCC) $(C_FLAGS) -c -o $@ $<  
-emulator8080: $(OBJ_P) $(LIBS)
-	$(GCC) -pthread -o emulator8080 $^ -ldl -lm 
+# emulator8080: $(OBJ_P) $(LIBS)
+# 	$(GCC) -pthread -o emulator8080 $^ -ldl -lm 
+emulator8080: $(OBJ_P)
+	$(GCC) -pthread -o emulator8080 $^ -ldl -lm -lX11 -lXext -lpthread -lSDL2 -lSDL2_mixer -lSDL2_image
 run_invaders: emulator8080
 	valgrind --leak-check=full --show-leak-kinds=all --suppressions=./misc/valgrind.supp ./emulator8080 rom/invaders
 run_disassembler: emulator8080
