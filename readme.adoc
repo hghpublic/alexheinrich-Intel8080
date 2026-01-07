@@ -1,0 +1,36 @@
+= Intel 8080
+:toc:
+:sectnums:
+ifndef::env-github[:icons: font]
+:note-caption: :paperclip:
+:important-caption: :exclamation:
+:warning-caption: :warning:
+
+[IMPORTANT]
+====
+The commit history of this branch is volatile. +
+Rebasing and force pushing happens at will. +
+The commits in this branch mostly collect changes with a narrow scope. +
+They rarely document code evolution. +
+The history may be rewritten without notice.
+====
+== Intel 8080
+
+=== build and run with `make`
+
+build::
++
+[source, shell]
+----
+make clean
+make
+----
+
+run::
++
+[source, shell]
+----
+./emulator8080 ./rom/invaders
+----
+
+=== build and run with `cmake`
